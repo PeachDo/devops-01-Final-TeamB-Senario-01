@@ -13,7 +13,7 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => res.send('Hello june World!')) 
+app.get('/', (req, res) => res.send('Hello june World!')) //
 
 app.get('/api/get/june', function(req, res){
     res.status(200).json({
