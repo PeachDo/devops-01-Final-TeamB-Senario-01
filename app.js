@@ -3,9 +3,7 @@ const app = express()
 const cors = require('cors');
 const port = 3000 
 const read = require('body-parser/lib/read');
-const mysql = require('mysql') 
-const writeDB = require('./db/MasterConnection');
-const readDB = require('./db/SlaveConnection');
+
 
 
 app.use(
