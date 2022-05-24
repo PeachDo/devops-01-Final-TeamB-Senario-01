@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors');
 const port = 3000 
 const mysql = require('mysql') 
-const db = require('./db/connection');
+const db = require('./models/writeDB');
 
 
 app.use(
