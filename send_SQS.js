@@ -3,7 +3,7 @@ var AWS = require('aws-sdk');
 AWS.config.update({region: 'ap-northeast-2'});
 
 var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
-
+//
 var params = {
    // Remove DelaySeconds parameter and value for FIFO queues
   DelaySeconds: 10,
