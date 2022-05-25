@@ -55,33 +55,6 @@ exports.findOne = (req,res)=>{
       });
 };
 
-// id로 삭제
-exports.delete = (req,res)=>{
-    Reservation.remove(req.params.reservationId, (err, data) => {
-        if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Not found Reservation with id ${req.params.reservationId}.`
-            });
-          } else {
-            res.status(500).send({
-              message: "Could not delete Reservation with id " + req.params.reeservationId
-            });
-          }
-        } else res.send({ message: `Reservation has been deleted successfully!` });
-      });
-};
 
-// 전체 삭제
-exports.deleteAll = (req,res)=>{
-    Reservation.removeAll((err, data) => {
-        if (err)
-          res.status(500).send({
-            message:
-              err.message || "Some error occurred while removing all reservations."
-          });
-        else res.send({ message: `All Reservations were deleted successfully!` });
-      });
-};
  
  

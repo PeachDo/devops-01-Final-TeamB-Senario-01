@@ -10,9 +10,5 @@ module.exports = app =>{
     // id로 조회
     app.get("/reservations/:reservationId", reservations.findOne);
 
-    // id로 삭제
-    app.delete("/reservations/:reservationId", reservations.delete);
-
-
 
 };
