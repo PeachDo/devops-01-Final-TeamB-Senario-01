@@ -5,7 +5,21 @@ const AWS = require('aws-sdk');
 const dotenv = require("dotenv").config();
 const { Producer } = require('sqs-producer');
 const app = express();
-
+// const session = require('express-session');
+// const connectRedis = require('connect-redis');
+// const RedisStore = connectRedis(session);
+// const sess = {
+//   resave: false,
+//   saveUninitialized: false,
+//   secret: sessionSecret,
+//   name: 'sessionId',
+//   cookie: {
+//     httpOnly: true,
+//     secure: false,
+//   },
+//   store: new RedisStore({ url: '레디스 호스팅 주소', logErrors: true }),
+// };
+// app.use(session(sess));
 app.use(
     cors({
       origin: true,
