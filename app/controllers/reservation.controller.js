@@ -1,4 +1,5 @@
 const Reservation = require("../models/reservation.model.js");
+const { Producer } = require('sqs-producer');
 
 // 새 객체 생성
 exports.create = (req,res)=>{
@@ -25,6 +26,29 @@ exports.create = (req,res)=>{
         };
     })
 };
+
+exports.TOSQS = (req, res) => {
+  const producer = Producer.create({
+    queueUrl: 'https://sqs.ap-northeast-2.amazonaws.com/523139768306/EC2_SQS_ECS',
+    region: 'ap-northeast-2'
+  });
+   
+  
+  producer.send([{
+    id: 'id1',
+    body: 'Reservation : OK'
+  }]);
+   
+  res.send('Resevation : Successed')
+}
+
+exports.MERGE_DB_SQS = async (req, res) => {
+  await this.create()
+  await this.TOSQS()
+  console.log('왔냐')
+  res.json({ code: 200, Reservation: 'OK'})
+};
+
 
 // 전체 조회 
 exports.findAll = (req,res)=>{
