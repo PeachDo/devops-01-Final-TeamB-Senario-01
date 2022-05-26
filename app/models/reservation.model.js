@@ -59,45 +59,6 @@ Reservation.getAll = result =>{
     });
 };
 
-
-// reservation id로 삭제
-Reservation.remove = (id, result)=>{
-    sql.query('DELETE FROM reservations WHERE id = ?',id, (err, res)=>{
-        if(err){
-            console.log("error: ", err);
-            result(err, null);
-            return;
-        }
-
-        if(res.affectedRows ==0){
-            // id 결과가 없을 시 
-            result({kind: "not_found"}, null);
-            return;
-        }
-
-        console.log("deleted reservation with id: ", id);
-        result(null, res);
-    });
-};
-
-// reservation 전체 삭제
-Reservation.removeAll = result =>{
-    sql.query('DELETE FROM reservations',(err, res)=>{
-        if(err){
-            console.log("error: ", err);
-            result(err, null);
-            return;
-        }
-
-        if(res.affectedRows ==0){
-            // reservation 결과가 없을 시 
-            result({kind: "not_found"}, null);
-            return;
-        }
-
-        console.log('deleted ${res.affectedRows} reservations');
-        result(null, res);
-    });
-};
+Reservation
 
 module.exports = Reservation;

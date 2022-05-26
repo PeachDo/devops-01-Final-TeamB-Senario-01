@@ -1,4 +1,5 @@
 const Reservation = require("../models/reservation.model.js");
+const { Producer } = require('sqs-producer');
 
 // 새 객체 생성
 exports.create = (req,res)=>{
@@ -25,6 +26,29 @@ exports.create = (req,res)=>{
         };
     })
 };
+
+exports.TOSQS = (req, res) => {
+  const producer = Producer.create({
+    queueUrl: 'https://sqs.ap-northeast-2.amazonaws.com/523139768306/EC2_SQS_ECS',
+    region: 'ap-northeast-2'
+  });
+   
+  
+  producer.send([{
+    id: 'id1',
+    body: 'Reservation : OK'
+  }]);
+   
+  res.send('Resevation : Successed')
+}
+
+exports.MERGE_DB_SQS = async (req, res) => {
+  await this.create()
+  await this.TOSQS()
+  console.log('왔냐')
+  res.json({ code: 200, Reservation: 'OK'})
+};
+
 
 // 전체 조회 
 exports.findAll = (req,res)=>{
@@ -55,33 +79,6 @@ exports.findOne = (req,res)=>{
       });
 };
 
-// id로 삭제
-exports.delete = (req,res)=>{
-    Reservation.remove(req.params.reservationId, (err, data) => {
-        if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Not found Reservation with id ${req.params.reservationId}.`
-            });
-          } else {
-            res.status(500).send({
-              message: "Could not delete Reservation with id " + req.params.reeservationId
-            });
-          }
-        } else res.send({ message: `Reservation has been deleted successfully!` });
-      });
-};
 
-// 전체 삭제
-exports.deleteAll = (req,res)=>{
-    Reservation.removeAll((err, data) => {
-        if (err)
-          res.status(500).send({
-            message:
-              err.message || "Some error occurred while removing all reservations."
-          });
-        else res.send({ message: `All Reservations were deleted successfully!` });
-      });
-};
  
  
