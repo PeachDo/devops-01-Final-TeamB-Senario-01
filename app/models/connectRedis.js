@@ -1,18 +1,14 @@
-const redis = require('redis');
-const redis_client = redis.createClient(6379,'teamb.ovtthy.ng.0001.apn2.cache.amazonaws.com');
+const Redis = require('redis');
 
-// Redis
-// redis_client.on("error", (err) => {
-//     console.error(err);
-// });
+async function createRedisClient () {
+  const client = Redis.createClient(6379,'teamb.ovtthy.ng.0001.apn2.cache.amazonaws.com');
 
-// redis_client.on("ready", ()=> {
-//     console.log("Redis is Ready");
-// });
+  client.on('connect', () => console.log('Connected to REDIS!'));
+  client.on('error', (err) => console.log('Error connecting to REDIS: ', err));
 
-redis_client.on(err => { 
-    if (err) console.log("read_DB_Redis 연결 실패 : ", err); 
-    console.log("read_DB_Redis Connected!!!"); 
-  })
+  await client.connect();
 
-module.exports = redis_client; 
+  return client;
+}
+
+module.exports = createRedisClient();
