@@ -29,7 +29,7 @@ exports.create = (req,res)=>{
 
     createRedisClient.then((client) => { 
       //do something with the client
-      client.set("Hello", "Real World").then(()=> { 
+      client.set("Hello", "World").then(()=> { 
          //can do something here 
       });
     });
