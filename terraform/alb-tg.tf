@@ -17,4 +17,5 @@ resource "aws_lb_target_group" "reserv_api_server" {
     protocol = "HTTP"
     timeout = 5
   }
+
 }
