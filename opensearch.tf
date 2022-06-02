@@ -6,34 +6,16 @@ resource "aws_opensearch_domain" "reservations" {
     enabled = true
   }
 
-  node_to_node_encryption {
-    enabled = true
-  }
-
   domain_endpoint_options {
     enforce_https = true
     tls_security_policy = "Policy-Min-TLS-1-0-2019-07"
   }
-
-
-/*
-  auto_tune_options {
-    desired_state = "NO_ROLLBACK"
-  }
-*/
 
   ebs_options {
     ebs_enabled = true
     volume_size = 10
     volume_type = "gp2"
     }
-
-/*
-  vpc_options {
-    subnet_ids = [aws_subnet.subnet_private1.id]
-  }
-
-  */
 
 advanced_security_options {
     enabled                        = true
@@ -69,15 +51,15 @@ node_to_node_encryption {
         "AWS": "arn:aws:iam::351954682436:user/terraform"
       },
       "Action": "es:ESHttpGet",
-      "Resource": "arn:aws:es:ap-northeast-2:351954682436:domain/test2-opensearch/*"
+      "Resource": "arn:aws:es:ap-northeast-2:351954682436:domain/test2-opensearch/"
     },
     {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "*"
+        "AWS": ""
       },
-      "Action": "es:*",
-      "Resource": "arn:aws:es:ap-northeast-2:351954682436:domain/test2-opensearch/*",
+      "Action": "es:",
+      "Resource": "arn:aws:es:ap-northeast-2:351954682436:domain/test2-opensearch/",
       "Condition": {
         "IpAddress": {
           "aws:SourceIp": "218.235.89.144/32"
