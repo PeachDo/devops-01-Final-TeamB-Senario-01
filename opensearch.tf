@@ -25,8 +25,8 @@ resource "aws_opensearch_domain" "reservations" {
       # You can also use IAM role/user ARN
       # master_user_arn = ""
     }
+  }
 }
-
 encrypt_at_rest {
     enabled = true
   }
@@ -40,38 +40,30 @@ node_to_node_encryption {
     enabled = true
   }
 
-#   access_policies = <<POLICIES
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Effect": "Allow",
-#       "Principal": {
-#         "AWS": ""
-#       },
-#       "Action": "es:ESHttpGet",
-#       "Resource": "${aws_opensearch_domain.test2-opensearch.arn}/*"
-#     },
-#     {
-#       "Effect": "Allow",
-#       "Principal": {
-#         "AWS": ""
-#       },
-#       "Action": "es:",
-#       "Resource": "${aws_opensearch_domain.test2-opensearch.arn}/*",
-#       "Condition": {
-#         "IpAddress": {
-#           "aws:SourceIp": "218.235.89.144/32"
-#         }
-#       }
-#     }
-#   ]
-# }
-#     POLICIES
-}
-    
 resource "aws_opensearch_domain_policy" "main" {
   domain_name = aws_opensearch_domain.reservations.domain_name
+
+ access_policies = <<POLICIES
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": ""
+      },
+      "Action": "es:",
+      "Condition": {
+          "IpAddress": {"aws:SourceIp": "218.235.89.144/32"}
+      },
+      "Resource": "${aws_opensearch_domain.reservations.arn}/*"
+    }
+  ]
+}
+POLICIES
+}
+    
+
 
 elasticsearch_configuration {
     domain_arn = aws_opensearch_domain.reservations.arn
@@ -86,5 +78,4 @@ elasticsearch_configuration {
       log_group_name = "ec2-test.log"
       log_stream_name = "stream-log"
     }
-  }
 }
