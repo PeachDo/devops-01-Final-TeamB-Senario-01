@@ -1,5 +1,5 @@
-resource "aws_opensearch_domain" "test-opensearch" {
-  domain_name    = "test-opensearch"
+resource "aws_opensearch_domain" "test2-opensearch" {
+  domain_name    = "test2-opensearch"
   engine_version = "OpenSearch_1.2"
 
   cluster_config {
@@ -10,38 +10,72 @@ resource "aws_opensearch_domain" "test-opensearch" {
     instance_count = 1
   }
 
+  auto_tune_options {
+    desired_state = "DISABLED"
+  }
+
   ebs_options {
     ebs_enabled = true
     volume_size = 10
     }
 
 
+/*
   vpc_options {
     subnet_ids = [aws_subnet.subnet_private1.id]
   }
 
+  */
+  advanced_security_options {
+    enabled                        = false
+    internal_user_database_enabled = true
+    master_user_options {
+      # master_user_name     = "admin"
+      # master_user_password = "Aa!12341234"
+      # You can also use IAM role/user ARN
+      master_user_arn = "aws_opensearch_domain.test2-opensearch.arn"
+    }
 }
+  encrypt_at_rest {
+    enabled = true
+  }
+  domain_endpoint_options {
+   # enforce_https       = false
+   tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
+  }
 
-resource "aws_elasticsearch_domain_policy" "os-policy" {
-    domain_name = "test-opensearch"
+  node_to_node_encryption {
+    enabled = true
+  }
 
-    access_policies = <<POLICIES
+  access_policies = <<POLICIES
+
+   {
+  "Version": "2012-10-17",
+  "Statement": [
     {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Effect": "Allow",
-          "Principal": {
-            "AWS": [
-              "*"
-            ]
-          },
-          "Action": [
-            "es:*"
-          ],
-          "Resource": "aws_elasticsearch_domain.test-opensearch.arn/*"
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "aws_opensearch_domain.test2-opensearch.arn"
+      },
+      "Action": "es:ESHttpGet",
+      "Resource": "${aws_opensearch_domain.test2-opensearch.arn}/*"
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "es:*",
+      "Resource": "${aws_opensearch_domain.test2-opensearch.arn}/*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": "218.235.89.144/32"
         }
-      ]
+      }
     }
+  ]
+}
     POLICIES
-    }
+
+}
