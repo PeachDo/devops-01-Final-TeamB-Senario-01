@@ -40,36 +40,35 @@ node_to_node_encryption {
     enabled = true
   }
 
-  access_policies = <<POLICIES
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": ""
-      },
-      "Action": "es:ESHttpGet",
-      "Resource": "${aws_opensearch_domain.test2-opensearch.arn}/*"
-    },
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": ""
-      },
-      "Action": "es:",
-      "Resource": "${aws_opensearch_domain.test2-opensearch.arn}/*",
-      "Condition": {
-        "IpAddress": {
-          "aws:SourceIp": "218.235.89.144/32"
-        }
-      }
-    }
-  ]
+#   access_policies = <<POLICIES
+# {
+#   "Version": "2012-10-17",
+#   "Statement": [
+#     {
+#       "Effect": "Allow",
+#       "Principal": {
+#         "AWS": ""
+#       },
+#       "Action": "es:ESHttpGet",
+#       "Resource": "${aws_opensearch_domain.test2-opensearch.arn}/*"
+#     },
+#     {
+#       "Effect": "Allow",
+#       "Principal": {
+#         "AWS": ""
+#       },
+#       "Action": "es:",
+#       "Resource": "${aws_opensearch_domain.test2-opensearch.arn}/*",
+#       "Condition": {
+#         "IpAddress": {
+#           "aws:SourceIp": "218.235.89.144/32"
+#         }
+#       }
+#     }
+#   ]
+# }
+#     POLICIES
 }
-    POLICIES
-
-    }
     
 resource "aws_opensearch_domain_policy" "main" {
   domain_name = aws_opensearch_domain.reservations.domain_name
