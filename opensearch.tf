@@ -88,20 +88,4 @@ node_to_node_encryption {
 }
     POLICIES
 
-    }
-
-  elasticsearch_configuration {
-    domain_arn = aws_opensearch_domain.truck.arn
-    role_arn = aws_iam_role.firehose_role.arn
-    index_name = "opensearch-index"
-    retry_duration = 60
-    index_rotation_period = "NoRotation"
-    buffering_interval = 60
-    buffering_size = 5
-
-    cloudwatch_logging_options {
-      enabled = true
-      log_group_name = "firehose-log"
-      log_stream_name = "stream-log"
-    }
-  }
+}
