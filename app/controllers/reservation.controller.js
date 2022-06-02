@@ -1,6 +1,5 @@
 const Reservation = require("../models/reservation.model.js");
 const createRedisClient = require("../models/connectRedis.js");
-const { Producer } = require('sqs-producer');
 
 // 새 객체 생성
 exports.create = (req,res)=>{
@@ -35,21 +34,6 @@ exports.create = (req,res)=>{
     });
 };
 
-// exports.TOSQS = (req, res) => {
-//   const producer = Producer.create({
-//     queueUrl: 'https://sqs.ap-northeast-2.amazonaws.com/523139768306/EC2_SQS_ECS',
-//     region: 'ap-northeast-2'
-//   });
-   
-  
-//   producer.send([{
-//     id: 'id1',
-//     body: 'Reservation : OK'
-//   }]);
-   
-//   res.send('Resevation : Successed')
-// }
-
 // 전체 조회 
 exports.findAll = (req,res)=>{
     Reservation.getAll((err, data) => {
@@ -64,6 +48,29 @@ exports.findAll = (req,res)=>{
 
 // id로 조회
 exports.findOne = (req,res)=>{
+  const searchTerm = req.query.search;
+    try {
+        createRedisClient.get(searchTerm, async (err, jobs) => {
+            if (err) throw err;
+    
+            if (jobs) {
+                res.status(200).send({
+                    jobs: JSON.parse(jobs),
+                    message: "data retrieved from the cache"
+                });
+            } else {
+                const jobs = await axios.get(`test-cache.ovtthy.ng.0001.apn2.cache.amazonaws.com:6379?search=${reservationId}`);
+                client.setex(searchTerm, 600, JSON.stringify(jobs.data));
+                res.status(200).send({
+                    jobs: jobs.data,
+                    message: "cache miss"
+                });
+            }
+        });
+    } catch(err) {
+        res.status(500).send({message: err.message});
+    }
+
     Reservation.findById(req.params.reservationId, (err, data) => {
         if (err) {
           if (err.kind === "not_found") {
@@ -78,6 +85,7 @@ exports.findOne = (req,res)=>{
         } else res.send(data);
       });
 };
+
 
 
  
