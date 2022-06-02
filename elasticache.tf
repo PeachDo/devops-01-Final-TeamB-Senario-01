@@ -20,12 +20,10 @@ resource "aws_elasticache_replication_group" "redis" {
   subnet_group_name = aws_elasticache_subnet_group.project4_cache.name
   security_group_ids = [aws_security_group.final_project4_private_sg.id]
  
-  automatic_failover_enabled = true
+  automatic_failover_enabled = false
  
   number_cache_clusters = 2
 
-  cluster_mode {
-    num_node_groups             = 1
-    replicas_per_node_group     = 1
-  }
+  availability_zones = ["us-west-2a","us-west-2b"]
+
 }
