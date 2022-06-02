@@ -23,5 +23,9 @@ resource "aws_elasticache_replication_group" "redis" {
   automatic_failover_enabled = true
  
   number_cache_clusters = 2
-  
+
+  cluster_mode {
+    num_node_groups             = 1
+    replicas_per_node_group     = 1
+  }
 }
