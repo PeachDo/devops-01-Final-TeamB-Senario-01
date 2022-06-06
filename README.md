@@ -84,7 +84,7 @@ source init.sql
 *npm dependencies*
 ```
 npm install mysql
-npm install body-parse
+npm install body-parser
 npm install express
 npm install nodemon
 npm install dotenv
