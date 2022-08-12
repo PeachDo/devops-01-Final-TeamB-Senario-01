@@ -109,7 +109,7 @@ sudo apt install mysql-client-core8.0
 ## **License**
 
 이 프로젝트는 코드스테이츠 DevOps 부트 캠프 1기 community에서 라이센스를 소유하고 있습니다.  
-
+private repository 에서 개인 public repository 로 옮겨온 과정입니다.
 
 ## **Acknowledgments**  
 
